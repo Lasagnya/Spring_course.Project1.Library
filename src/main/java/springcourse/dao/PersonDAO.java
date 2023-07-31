@@ -30,13 +30,13 @@ public class PersonDAO {
 
 	public void save(Person person) {
 		int[] argTypes = new int[] {Types.VARCHAR, Types.INTEGER};
-		jdbcTemplate.update("insert into person(name, age) values(?, ?)", new Object[]{person.getName(), person.getAge()}, argTypes);
+		jdbcTemplate.update("insert into person(name, birth) values(?, ?)", new Object[]{person.getName(), person.getBirth()}, argTypes);
 	}
 
 	public void update(int id, Person updatedPerson) {
 		int[] argTypes = new int[] {Types.VARCHAR, Types.INTEGER, Types.INTEGER};
-		jdbcTemplate.update("update person set name=?, age=? where id=?",
-				new Object[]{updatedPerson.getName(), updatedPerson.getAge(), id}, argTypes);
+		jdbcTemplate.update("update person set name=?, birth=? where id=?",
+				new Object[]{updatedPerson.getName(), updatedPerson.getBirth(), id}, argTypes);
 	}
 
 	public void delete(int id) {

@@ -12,9 +12,9 @@ public class Person {
 	@Size(min = 3, max = 50, message = "Name should be between 3 and 50 characters")
 	private String name;
 
-	@Min(value = 1, message = "Age should be greater than 1")
-	@Max(value = 150, message = "Age should be less than 150")
-	private int age;
+	@Min(value = 1800, message = "Birth should be greater than 1800")
+	@Max(value = 3000, message = "Birth should be less than 3000")
+	private int birth;
 
 	public int getId() {
 		return id;
@@ -32,11 +32,11 @@ public class Person {
 		this.name = name;
 	}
 
-	public int getAge() {
-		return age;
+	public int getBirth() {
+		return birth;
 	}
 
-	public void setAge(int age) {
-		this.age = age;
+	public void setBirth(int age) {
+		this.birth = age;
 	}
 }
