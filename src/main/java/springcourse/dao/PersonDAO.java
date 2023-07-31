@@ -24,22 +24,27 @@ public class PersonDAO {
 	}
 
 	public Optional<Person> show(int id) {
-		return jdbcTemplate.query("select * from person where id=?", new Object[] {id}, new int[] {Types.INTEGER}, new BeanPropertyRowMapper<>(Person.class))
+		return jdbcTemplate.query("select * from person where id=?", new Object[]{id}, new int[]{Types.INTEGER}, new BeanPropertyRowMapper<>(Person.class))
+				.stream().findAny();
+	}
+
+	public Optional<Person> show(String name) {
+		return jdbcTemplate.query("select * from person where name=?", new Object[]{name}, new int[]{Types.VARCHAR}, new BeanPropertyRowMapper<>(Person.class))
 				.stream().findAny();
 	}
 
 	public void save(Person person) {
-		int[] argTypes = new int[] {Types.VARCHAR, Types.INTEGER};
+		int[] argTypes = new int[]{Types.VARCHAR, Types.INTEGER};
 		jdbcTemplate.update("insert into person(name, birth) values(?, ?)", new Object[]{person.getName(), person.getBirth()}, argTypes);
 	}
 
 	public void update(int id, Person updatedPerson) {
-		int[] argTypes = new int[] {Types.VARCHAR, Types.INTEGER, Types.INTEGER};
+		int[] argTypes = new int[]{Types.VARCHAR, Types.INTEGER, Types.INTEGER};
 		jdbcTemplate.update("update person set name=?, birth=? where id=?",
 				new Object[]{updatedPerson.getName(), updatedPerson.getBirth(), id}, argTypes);
 	}
 
 	public void delete(int id) {
-		jdbcTemplate.update("delete from person where id=?", new Object[]{id}, new int[] {Types.INTEGER});
+		jdbcTemplate.update("delete from person where id=?", new Object[]{id}, new int[]{Types.INTEGER});
 	}
 }
