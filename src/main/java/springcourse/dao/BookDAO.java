@@ -22,16 +22,12 @@ public class BookDAO {
 	}
 
 	public List<Book> index() {
-		return jdbcTemplate.query("select * from book",
-				new BookMapper());
-				//new BeanPropertyRowMapper<>(Book.class));
+		return jdbcTemplate.query("select * from book", new BookMapper());
 	}
 
 	public Optional<Book> show(int id) {
 		return jdbcTemplate.query("select * from book where id=?",
-						new Object[] {id}, new int[] {Types.INTEGER},
-						//new BeanPropertyRowMapper<>(Book.class))
-						new BookMapper())
+						new Object[] {id}, new int[] {Types.INTEGER}, new BookMapper())
 				.stream().findAny();
 	}
 
