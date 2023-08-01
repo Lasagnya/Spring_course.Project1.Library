@@ -7,16 +7,19 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import springcourse.dao.BookDAO;
+import springcourse.dao.PersonDAO;
 import springcourse.models.Book;
 
 @Controller
 @RequestMapping("/books")
 public class BooksController {
 	private final BookDAO bookDAO;
+	private final PersonDAO personDAO;
 
 	@Autowired
-	public BooksController(BookDAO bookDAO) {
+	public BooksController(BookDAO bookDAO, PersonDAO personDAO) {
 		this.bookDAO = bookDAO;
+		this.personDAO = personDAO;
 	}
 
 	@GetMapping()
@@ -28,7 +31,11 @@ public class BooksController {
 	@GetMapping("/{id}")
 	public String show(Model model, @PathVariable("id") int id) {
 		if (bookDAO.show(id).isPresent()) {
-			model.addAttribute("book", bookDAO.show(id).get());
+			Book book = bookDAO.show(id).get();
+			model.addAttribute("book", book);
+			model.addAttribute("people", personDAO.index());
+			if (book.getPerson_id() != 0)
+				model.addAttribute("person", personDAO.show(book.getPerson_id()).get());
 			return "books/show";
 		}
 		else {
@@ -67,13 +74,26 @@ public class BooksController {
 	public String update(@PathVariable("id") int id, @ModelAttribute("book") @Valid Book book, BindingResult bindingResult) {
 		if(bindingResult.hasErrors())
 			return "books/edit";
+		System.out.println(book.getTitle());
 		bookDAO.update(id, book);
+		return "redirect:/books";
+	}
+
+	@PatchMapping("/{id}/assign")
+	public String assign(@PathVariable("id") int id, @ModelAttribute("book") Book book) {
+		bookDAO.assign(id, book);
 		return "redirect:/books";
 	}
 
 	@DeleteMapping("/{id}")
 	public String delete(@PathVariable("id") int id) {
 		bookDAO.delete(id);
+		return "redirect:/books";
+	}
+
+	@PatchMapping("/{id}/delete_assign")
+	public String deleteAssign(@PathVariable("id") int id) {
+		bookDAO.deleteAssign(id);
 		return "redirect:/books";
 	}
 }

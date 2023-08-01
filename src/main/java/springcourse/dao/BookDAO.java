@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import springcourse.models.Book;
+import springcourse.util.BookMapper;
 
 import java.sql.Types;
 import java.util.List;
@@ -20,12 +21,16 @@ public class BookDAO {
 	}
 
 	public List<Book> index() {
-		return jdbcTemplate.query("select * from book", new BeanPropertyRowMapper<>(Book.class));
+		return jdbcTemplate.query("select * from book",
+				new BookMapper());
+				//new BeanPropertyRowMapper<>(Book.class));
 	}
 
 	public Optional<Book> show(int id) {
 		return jdbcTemplate.query("select * from book where id=?",
-						new Object[] {id}, new int[] {Types.INTEGER}, new BeanPropertyRowMapper<>(Book.class))
+						new Object[] {id}, new int[] {Types.INTEGER},
+						//new BeanPropertyRowMapper<>(Book.class))
+						new BookMapper())
 				.stream().findAny();
 	}
 
@@ -36,12 +41,23 @@ public class BookDAO {
 	}
 
 	public void update(int id, Book updatedBook) {
+		//System.out.println(updatedBook.getTitle());
 		int[] argTypes = new int[] {Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER};
 		jdbcTemplate.update("update book set title=?, author=?, year=? where id=?",
 				new Object[]{updatedBook.getTitle(), updatedBook.getAuthor(), updatedBook.getYear(), id}, argTypes);
 	}
 
+	public void assign(int id, Book assignedBook) {
+		jdbcTemplate.update("update book set person_id=? where id=?",
+				new Object[]{assignedBook.getPerson_id(), id}, new int[]{Types.INTEGER, Types.INTEGER});
+	}
+
 	public void delete(int id) {
 		jdbcTemplate.update("delete from book where id=?", new Object[]{id}, new int[] {Types.INTEGER});
+	}
+
+	public void deleteAssign(int id) {
+		jdbcTemplate.update("update book set person_id=null where id=?",
+				new Object[]{id}, new int[] {Types.INTEGER});
 	}
 }
