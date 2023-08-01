@@ -74,15 +74,14 @@ public class BooksController {
 	public String update(@PathVariable("id") int id, @ModelAttribute("book") @Valid Book book, BindingResult bindingResult) {
 		if(bindingResult.hasErrors())
 			return "books/edit";
-		System.out.println(book.getTitle());
 		bookDAO.update(id, book);
-		return "redirect:/books";
+		return String.format("redirect:/books/%d", id);
 	}
 
 	@PatchMapping("/{id}/assign")
 	public String assign(@PathVariable("id") int id, @ModelAttribute("book") Book book) {
 		bookDAO.assign(id, book);
-		return "redirect:/books";
+		return String.format("redirect:/books/%d", id);
 	}
 
 	@DeleteMapping("/{id}")
@@ -94,6 +93,6 @@ public class BooksController {
 	@PatchMapping("/{id}/delete_assign")
 	public String deleteAssign(@PathVariable("id") int id) {
 		bookDAO.deleteAssign(id);
-		return "redirect:/books";
+		return String.format("redirect:/books/%d", id);
 	}
 }

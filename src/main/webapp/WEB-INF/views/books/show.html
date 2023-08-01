@@ -11,9 +11,8 @@
 
 <div th:if="${book.person_id == 0}">
   <div>This book is free.</div>
-
-  <label for="person-select">Choose a person to assign:</label>
   <form th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.getId()})}">
+    <label for="person-select">Choose a person to assign:</label>
     <select id="person-select" th:object="${book}" th:field="*{person_id}">
       <option th:each="person1 : ${people}" th:value="${person1.getId()}" th:text="${person1.getName()}"></option>
     </select>
@@ -35,6 +34,10 @@
 </form>
 <form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}">
   <input type="submit" value="Delete"/>
+</form>
+<br>
+<form th:method="GET" th:action="@{/books}">
+  <input type="submit" value="All books"/>
 </form>
 </body>
 </html>
