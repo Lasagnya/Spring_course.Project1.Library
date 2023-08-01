@@ -32,6 +32,7 @@ public class PeopleController {
 	public String show(Model model, @PathVariable("id") int id) {
 		if (personDAO.show(id).isPresent()) {
 			model.addAttribute("person", personDAO.show(id).get());
+			model.addAttribute("books", personDAO.showAssignedBooks(id));
 			return "people/show";
 		}
 		else {

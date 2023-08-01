@@ -10,7 +10,7 @@
 <br>
 
 <div th:if="${book.person_id == 0}">
-  <div>This book is free.</div>
+  <div><b>This book is free.</b></div>
   <form th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.getId()})}">
     <label for="person-select">Choose a person to assign:</label>
     <select id="person-select" th:object="${book}" th:field="*{person_id}">
