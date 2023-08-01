@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import springcourse.models.Book;
+import springcourse.models.Person;
 import springcourse.util.BookMapper;
 
 import java.sql.Types;
@@ -59,5 +60,11 @@ public class BookDAO {
 	public void deleteAssign(int id) {
 		jdbcTemplate.update("update book set person_id=null where id=?",
 				new Object[]{id}, new int[] {Types.INTEGER});
+	}
+
+	public Optional<Person> showAssignedPerson(int id) {
+		return jdbcTemplate.query("select person.id, name, birth from person join book on person.id = book.person_id where book.id=?",
+				new Object[]{id}, new int[] {Types.INTEGER}, new BeanPropertyRowMapper<>(Person.class))
+				.stream().findAny();
 	}
 }

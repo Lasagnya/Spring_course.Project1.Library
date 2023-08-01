@@ -33,9 +33,9 @@ public class BooksController {
 		if (bookDAO.show(id).isPresent()) {
 			Book book = bookDAO.show(id).get();
 			model.addAttribute("book", book);
-			model.addAttribute("people", personDAO.index());
-			if (book.getPerson_id() != 0)
-				model.addAttribute("person", personDAO.show(book.getPerson_id()).get());
+			if (bookDAO.showAssignedPerson(id).isPresent())
+				model.addAttribute("person", bookDAO.showAssignedPerson(id).get());
+			else model.addAttribute("people", personDAO.index());
 			return "books/show";
 		}
 		else {
