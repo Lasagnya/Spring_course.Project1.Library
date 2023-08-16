@@ -35,6 +35,11 @@ public class PeopleService {
 		return peopleRepository.findById(id);
 	}
 
+	@Transactional(readOnly = true)
+	public Optional<Person> findOne(String name) {
+		return peopleRepository.findByName(name);
+	}
+
 	public void save(Person person) {
 		peopleRepository.save(person);
 	}

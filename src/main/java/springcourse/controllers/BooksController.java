@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import springcourse.dao.PersonDAO;
 import springcourse.models.Book;
 import springcourse.models.Person;
 import springcourse.services.BooksService;
@@ -15,8 +14,6 @@ import springcourse.services.PeopleService;
 @Controller
 @RequestMapping("/books")
 public class BooksController {
-	//private final BookDAO booksService;
-	//private final PersonDAO personDAO;
 	private final BooksService booksService;
 	private final PeopleService peopleService;
 
@@ -27,8 +24,13 @@ public class BooksController {
 	}
 
 	@GetMapping()
-	public String index(Model model) {
-		model.addAttribute("books", booksService.findAll());
+	public String index(Model model,
+						@RequestParam(value = "page", required = false) Integer page,
+						@RequestParam(value = "books_per_page", required = false) Integer size,
+						@RequestParam(value = "sort_by_year", required = false) Boolean sort) {
+		if (page == null || size == null)
+			model.addAttribute("books", booksService.findAll(sort));
+		else model.addAttribute("books", booksService.findAll(page, size, sort));
 		return "books/index";
 	}
 

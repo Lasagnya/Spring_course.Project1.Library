@@ -5,6 +5,9 @@ import jakarta.persistence.EntityManager;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springcourse.models.Book;
@@ -27,8 +30,16 @@ public class BooksService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Book> findAll() {
-		return booksRepository.findAll();
+	public List<Book> findAll(Boolean sort) {
+		if (sort != null && sort)
+			return booksRepository.findAll(Sort.by("year"));
+		else return booksRepository.findAll();
+	}
+
+	public List<Book> findAll(Integer page, Integer size, Boolean sort) {
+		if (sort != null && sort)
+			return booksRepository.findAll(PageRequest.of(page, size, Sort.by("year"))).getContent();
+		else return booksRepository.findAll(PageRequest.of(page, size)).getContent();
 	}
 
 	@Transactional(readOnly = true)
