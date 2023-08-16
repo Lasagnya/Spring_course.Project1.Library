@@ -100,4 +100,15 @@ public class BooksController {
 		booksService.deleteAssign(id);
 		return String.format("redirect:/books/%d", id);
 	}
+
+	@GetMapping("/search")
+	public String searchPage() {
+		return "books/search";
+	}
+
+	@PostMapping("/search")
+	public String search(@RequestParam("request") String request, Model model) {
+		model.addAttribute("books", booksService.findByTitleStartingWith(request));
+		return "books/search";
+	}
 }
