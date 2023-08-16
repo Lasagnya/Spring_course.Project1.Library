@@ -46,7 +46,7 @@ public class BookDAO {
 
 	public void assign(int id, Book assignedBook) {
 		jdbcTemplate.update("update book set person_id=? where id=?",
-				new Object[]{assignedBook.getPerson_id(), id}, new int[]{Types.INTEGER, Types.INTEGER});
+				new Object[]{assignedBook.getOwner(), id}, new int[]{Types.INTEGER, Types.INTEGER});
 	}
 
 	public void delete(int id) {

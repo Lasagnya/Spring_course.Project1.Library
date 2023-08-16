@@ -9,18 +9,18 @@
 <div th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}"></div>
 <br>
 
-<div th:if="${book.person_id == 0}">
+<div th:if="${book.owner == null}">
   <div><b>This book is free.</b></div>
   <form th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.getId()})}">
     <label for="person-select">Choose a person to assign:</label>
-    <select id="person-select" th:object="${book}" th:field="*{person_id}">
-      <option th:each="person1 : ${people}" th:value="${person1.getId()}" th:text="${person1.getName()}"></option>
+    <select id="person-select" th:object="${person}" th:field="*{id}">
+      <option th:each="person : ${people}" th:value="${person.getId()}" th:text="${person.getName()}"></option>
     </select>
     <input type="submit" value="Assign a book"/>
   </form>
 </div>
 
-<div th:if="${book.person_id != 0}">
+<div th:if="${book.owner != null}">
   <div th:text="${'Now the book is at ' + person.getName() + '.'}"></div>
   <form th:method="PATCH" th:action="@{/books/{id}/delete_assign(id=${book.getId()})}">
     <input type="submit" value="Delete assign"/>

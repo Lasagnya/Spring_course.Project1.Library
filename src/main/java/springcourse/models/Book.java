@@ -1,21 +1,35 @@
 package springcourse.models;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Size;
 
+@Entity
+@Table(name = "book")
 public class Book {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int id;
 
-	private int person_id;
+	@ManyToOne
+	@JoinColumn(name = "person_id", referencedColumnName = "id")
+	private Person owner;
 
 	@Size(min = 2, max = 100, message = "Title should be between 2 and 100 characters")
+	@Column(name = "title")
 	private String title;
 
 	@Size(min = 3, max = 50, message = "Author should be between 3 and 50 characters")
+	@Column(name = "author")
 	private String author;
 
 	@Max(value = 3000, message = "Year should be less than 3000")
+	@Column(name = "year")
 	private int year;
+
+	public Book() {
+	}
 
 	public int getId() {
 		return id;
@@ -49,11 +63,11 @@ public class Book {
 		this.year = year;
 	}
 
-	public int getPerson_id() {
-		return person_id;
+	public Person getOwner() {
+		return owner;
 	}
 
-	public void setPerson_id(int person_id) {
-		this.person_id = person_id;
+	public void setOwner(Person owner) {
+		this.owner = owner;
 	}
 }
