@@ -9,5 +9,6 @@ create table book(
                      title varchar not null,
                      author varchar not null,
                      year integer check ( year < 3000 ),
-                     person_id integer references person(id) on delete set null
+                     person_id integer references person(id) on delete set null,
+                     taking_time timestamp
 );

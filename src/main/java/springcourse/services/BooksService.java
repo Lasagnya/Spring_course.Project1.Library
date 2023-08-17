@@ -14,6 +14,7 @@ import springcourse.models.Book;
 import springcourse.models.Person;
 import springcourse.repositories.BooksRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,6 +81,7 @@ public class BooksService {
 		Book book = session.get(Book.class, id);
 		Person person = session.get(Person.class, oldPerson.getId());
 		book.setOwner(person);
+		book.setTakingTime(new Date());
 		person.getBooks().add(book);
 	}
 
@@ -88,6 +90,7 @@ public class BooksService {
 		Book book = session.get(Book.class, id);
 		book.getOwner().getBooks().remove(book);
 		book.setOwner(null);
+		book.setTakingTime(null);
 	}
 }
 

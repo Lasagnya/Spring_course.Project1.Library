@@ -35,18 +35,16 @@ public class BooksController {
 	}
 
 	@GetMapping("/{id}")
-	public String show(Model model, @PathVariable("id") int id, @ModelAttribute("person") Person person) {
+	public String show(Model model, @PathVariable("id") int id, @ModelAttribute("assignedPerson") Person person) {
 		if (booksService.findOne(id).isPresent()) {
 			model.addAttribute("book", booksService.findOne(id).get());
 			if (booksService.showAssignedPerson(id) != null)
-				model.addAttribute("person", booksService.showAssignedPerson(id));
+				model.addAttribute("assignedPerson", booksService.showAssignedPerson(id));
 			else model.addAttribute("people", peopleService.findAll());
 			return "books/show";
 		}
-		else {
-			model.addAttribute("id", id);
-			return "books/incorrect_id";
-		}
+		else model.addAttribute("id", id);
+		return "books/incorrect_id";
 	}
 
 	@GetMapping("/new")
@@ -84,7 +82,7 @@ public class BooksController {
 	}
 
 	@PatchMapping("/{id}/assign")
-	public String assign(@PathVariable("id") int id, @ModelAttribute("person") Person person) {
+	public String assign(@PathVariable("id") int id, @ModelAttribute("assignedPerson") Person person) {
 		booksService.assign(id, person);
 		return String.format("redirect:/books/%d", id);
 	}
