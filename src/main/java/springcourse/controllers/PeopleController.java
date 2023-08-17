@@ -6,12 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import springcourse.models.Book;
 import springcourse.models.Person;
 import springcourse.services.PeopleService;
 import springcourse.util.PersonValidator;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/people")

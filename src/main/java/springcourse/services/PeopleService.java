@@ -1,8 +1,6 @@
 package springcourse.services;
 
-import jakarta.persistence.EntityManager;
 import org.hibernate.Hibernate;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +8,7 @@ import springcourse.models.Book;
 import springcourse.models.Person;
 import springcourse.repositories.PeopleRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,12 +16,10 @@ import java.util.Optional;
 @Transactional
 public class PeopleService {
 	private final PeopleRepository peopleRepository;
-	private final EntityManager entityManager;
 
 	@Autowired
-	public PeopleService(PeopleRepository peopleRepository, EntityManager entityManager) {
+	public PeopleService(PeopleRepository peopleRepository) {
 		this.peopleRepository = peopleRepository;
-		this.entityManager = entityManager;
 	}
 
 	@Transactional(readOnly = true)
@@ -55,9 +52,11 @@ public class PeopleService {
 
 	@Transactional(readOnly = true)
 	public List<Book> showAssignedBooks(int id) {
-		Session session = entityManager.unwrap(Session.class);
-		Person person = session.get(Person.class, id);
-		Hibernate.initialize(person.getBooks());
-		return person.getBooks();
+		Optional<Person> person = peopleRepository.findById(id);
+		if (person.isPresent()) {
+			Hibernate.initialize(person.get().getBooks());
+			return person.get().getBooks();
+		}
+		else return Collections.emptyList();
 	}
 }
